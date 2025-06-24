@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mantissa_alignment_and_adder(Clk,Load,Reset,S_A,S_B,E_A,E_B,M_A,M_B,S_Result,E_Result,M_Result,Carry);
+module mantissa_alignment_and_adder(Clk,Load,Reset,S_A,S_B,E_A,E_B,M_A,M_B,S_Result,E_Result,M_Result,Carry,Result_stable);
 input S_A;
 input S_B;
 input [7:0]E_A;
@@ -35,6 +35,7 @@ output reg S_Result;
 output reg [7:0]E_Result;
 output reg [23:0]M_Result;
 output reg Carry;
+output Result_stable;
 
 wire exponent_borrow;
 wire [7:0]count_to_shift;
@@ -89,7 +90,8 @@ count_shifter mantissa_aligner(
     .Clear(Reset),
     .Clk(Clk),
     .Direction(1'b0),
-    .Result(aligned_mantissa));  
+    .Result(aligned_mantissa),
+    .shift_enable(Result_stable));  
 
 adder_subtractor_24bit mantissa_adder(
     .A(mantissa_as_it_is),

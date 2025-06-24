@@ -14,6 +14,7 @@ wire S_Result;
 wire [7:0]E_Result;
 wire [23:0]M_Result;
 wire Carry;
+wire Result_stable;
 
 mantissa_alignment_and_adder uut(
     .S_A(S_A),
@@ -28,7 +29,8 @@ mantissa_alignment_and_adder uut(
     .S_Result(S_Result),
     .E_Result(E_Result),
     .M_Result(M_Result),
-    .Carry(Carry));
+    .Carry(Carry),
+    .Result_stable(Result_stable));
     
 always #5 Clk = ~Clk;
 initial begin
@@ -88,7 +90,20 @@ initial begin
     Load = 1;
     #10
     Load = 0;
+    #300
     
+    Reset = 1;
+    #10
+    Reset = 0;
+    S_A = 1;
+    S_B = 1;
+    E_A = 8'd120;
+    E_B = 8'd130;
+    M_A = 24'H800000;
+    M_B = 24'H800000;
+    Load = 1;
+    #10
+    Load = 0;
      
 end
 

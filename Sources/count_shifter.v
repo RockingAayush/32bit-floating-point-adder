@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module count_shifter(Count,Load,Data,Clear,Clk,Direction,Result);
+module count_shifter(Count,Load,Data,Clear,Clk,Direction,Result,shift_enable);
 input [23:0]Data;
 input [7:0]Count;
 input Load;  //Load = 1 Load data Load = 0 Shift
@@ -30,7 +30,11 @@ input Direction; //Direction = 0 right shift Direction = 1 left shift
 output [23:0]Result;
 
 wire [4:0]Q_count;
-wire shift_enable;
+
+output shift_enable;
+wire shift_enable_internal;
+assign shift_enable = shift_enable_internal;
+
 reg [1:0]S;
 wire [23:0] internal_result;
 
@@ -38,14 +42,14 @@ down_counter_5bit counter(
             .count(Count[4:0]),
             .Load(Load),
             .Clk(Clk),
-            .shift_enable(shift_enable),
+            .shift_enable(shift_enable_internal),
             .Q(Q_count),
             .Reset(Clear));
 
 always@(*) begin
     if (Load)
         S = 2'b11;      //Parallel load
-    else if(~shift_enable)
+    else if(~shift_enable_internal)
         S = {Direction,~Direction};  //Right-Left shift
     else 
         S = 2'b00;   //Hold data        

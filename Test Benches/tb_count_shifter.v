@@ -28,6 +28,7 @@ reg Clk;
 reg Clear;
 reg Direction;
 wire [23:0]Result;
+wire shift_enable;
 
 count_shifter uut(
                 .Data(Data),
@@ -36,7 +37,9 @@ count_shifter uut(
                 .Clk(Clk),
                 .Clear(Clear),
                 .Direction(Direction),
-                .Result(Result));
+                .Result(Result),
+                .shift_enable(shift_enable)
+                );
 
 always #5 Clk = ~Clk;
 
