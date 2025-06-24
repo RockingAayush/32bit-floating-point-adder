@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mantissa_alignment_and_adder(Clk,Reset,S_A,S_B,E_A,E_B,M_A,M_B,S_Result,E_Result,M_Result,Carry);
+module mantissa_alignment_and_adder(Clk,Load,Reset,S_A,S_B,E_A,E_B,M_A,M_B,S_Result,E_Result,M_Result,Carry);
 input S_A;
 input S_B;
 input [7:0]E_A;
@@ -29,6 +29,7 @@ input [23:0]M_A;
 input [23:0]M_B;
 input Clk;
 input Reset;
+input Load;
 
 output reg S_Result;
 output reg [7:0]E_Result;
@@ -47,8 +48,6 @@ wire [23:0]mantissa_difference;
 wire carry_after_mantissa_addition;
 wire control_for_adder_or_subtractor;
 
-reg load_flag;
-
 wire mantissa_as_it_is_greater;
 wire mantissa_to_be_aligned_greater;
 wire mantissas_equal;
@@ -57,14 +56,7 @@ wire exponent_A_greater;
 wire exponent_B_greater;
 wire exponents_equal;
 
-assign control_for_adder_or_subtractor = S_A^S_B;
-
-always @(posedge Clk or posedge Reset) begin
-    if (Reset)
-        load_flag <= 1'b1; // When Reset is asserted, prepare to load
-    else
-        load_flag <= 1'b0; // Automatically deassert Load on the next cycle
-end
+assign control_for_adder_or_subtractor = S_A ^ S_B;
 
 adder_subtractor_8bit exponent_difference(
         .A(E_A),
@@ -89,10 +81,10 @@ case(exponent_borrow)
 endcase        
 end
 
-
+    
 count_shifter mantissa_aligner(
     .Count(count_to_shift),
-    .Load(load_flag),
+    .Load(Load),
     .Data(mantissa_to_be_aligned),
     .Clear(Reset),
     .Clk(Clk),
@@ -152,7 +144,7 @@ always@(*) begin
         end     
         1'b1:begin
             M_Result = mantissa_difference; 
-            Carry = 0'b0;
+            Carry = 1'b0;
         end
     endcase
 end              

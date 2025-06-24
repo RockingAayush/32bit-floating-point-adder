@@ -39,7 +39,8 @@ down_counter_5bit counter(
             .Load(Load),
             .Clk(Clk),
             .shift_enable(shift_enable),
-            .Q(Q_count));
+            .Q(Q_count),
+            .Reset(Clear));
 
 always@(*) begin
     if (Load)

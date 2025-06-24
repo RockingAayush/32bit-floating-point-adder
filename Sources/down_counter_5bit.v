@@ -2,6 +2,7 @@ module down_counter_5bit(
     input [4:0] count,
     input Load,
     input Clk,
+    input Reset,
     output shift_enable,
     output [4:0] Q   // Added Q as output
 );
@@ -24,10 +25,10 @@ assign J = (Load) ? count : T;
 assign K = (Load) ? ~count : T;
 
 // Instantiating 5 JK flip-flops
-jkFF jkFF0(.J(J[0]), .K(K[0]), .Clk(Clk), .Q(Q[0]), .Qbar(Qbar[0]));
-jkFF jkFF1(.J(J[1]), .K(K[1]), .Clk(Clk), .Q(Q[1]), .Qbar(Qbar[1]));
-jkFF jkFF2(.J(J[2]), .K(K[2]), .Clk(Clk), .Q(Q[2]), .Qbar(Qbar[2]));
-jkFF jkFF3(.J(J[3]), .K(K[3]), .Clk(Clk), .Q(Q[3]), .Qbar(Qbar[3]));
-jkFF jkFF4(.J(J[4]), .K(K[4]), .Clk(Clk), .Q(Q[4]), .Qbar(Qbar[4]));
+jkFF jkFF0(.J(J[0]), .K(K[0]), .Clk(Clk), .Q(Q[0]), .Qbar(Qbar[0]), .Reset(Reset));
+jkFF jkFF1(.J(J[1]), .K(K[1]), .Clk(Clk), .Q(Q[1]), .Qbar(Qbar[1]), .Reset(Reset));
+jkFF jkFF2(.J(J[2]), .K(K[2]), .Clk(Clk), .Q(Q[2]), .Qbar(Qbar[2]), .Reset(Reset));
+jkFF jkFF3(.J(J[3]), .K(K[3]), .Clk(Clk), .Q(Q[3]), .Qbar(Qbar[3]), .Reset(Reset));
+jkFF jkFF4(.J(J[4]), .K(K[4]), .Clk(Clk), .Q(Q[4]), .Qbar(Qbar[4]), .Reset(Reset));
 
 endmodule

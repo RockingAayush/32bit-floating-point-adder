@@ -20,16 +20,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module jkFF(J,K,Clk,Q,Qbar);
+module jkFF(J,K,Clk,Q,Qbar,Reset);
 input J;
 input K;
 input Clk;
+input Reset;
 output reg Q;
 output Qbar;
 
 assign Qbar = ~Q;
 
-always@(posedge Clk) begin
+always@(posedge Clk or posedge Reset) begin
+if (Reset) begin
+    Q <= 1'b0;
+end else begin
 case({J,K})
     2'b00: begin
         Q <= Q;
@@ -44,5 +48,6 @@ case({J,K})
         Q <= ~Q;
     end
 endcase
+end
 end
 endmodule
