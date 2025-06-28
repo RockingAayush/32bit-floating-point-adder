@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 18.06.2025 15:49:37
+// Create Date: 24.06.2025 19:49:33
 // Design Name: 
-// Module Name: tb_full_adder
+// Module Name: tb_Leading_Zero_Detector
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,38 +20,29 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module tb_full_adder();
+module tb_Leading_Zero_Detector();
 
-reg A;
-reg B;
-reg Cin;
+reg [23:0]num;
 reg enable;
-wire Cout;
-wire Sum;
+wire [4:0]count;
 
-full_adder uut(.A(A),.B(B),.Cin(Cin),.Sum(Sum),.Cout(Cout),.enable(enable));
+Leading_Zero_Detector uut(
+    .num(num),
+    .enable(enable),
+    .count(count));
+    
 initial begin
-    #10
-    enable = 0;
-    A = 1'b0;
-    B = 1'b0;
-    Cin = 1'b0;
-    #10
-    enable = 1; 
-    A = 1'b1;
-    B = 1'b1;
-    Cin = 1'b0;
-    #10
-    enable = 0; 
-    A = 1'b1;
-    B = 1'b1;
-    Cin = 1'b1;
     #10 
+    enable = 0;
+    num = 24'H000080;
+    #10
     enable = 1;
-    A = 1'b0;
-    B = 1'b1;
-    Cin = 1'b1;
+    #10
+    num = 24'H100123;
+    #10 
+    num = 24'H009008;
+    #10
+    num = 24'H000000;
     
-    
-end
+end    
 endmodule

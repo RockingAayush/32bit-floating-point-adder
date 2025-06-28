@@ -25,13 +25,15 @@ module tb_adder_subtractor_24bit();
 reg [23:0]A;
 reg [23:0]B;
 reg Ctl;
+reg enable;
 wire Cout;
 wire [23:0]Sum;
 wire [23:0]Difference;
 
-adder_subtractor_24bit uut(.A(A),.B(B),.Ctl(Ctl),.Cout(Cout),.Sum(Sum),.Difference(Difference));
+adder_subtractor_24bit uut(.A(A),.B(B),.Ctl(Ctl),.Cout(Cout),.Sum(Sum),.Difference(Difference),.enable(enable));
 initial begin
     #10
+    enable = 1;
     A = 24'd28;
     B = 24'd34;
     Ctl = 0;
@@ -52,6 +54,7 @@ initial begin
     B = 24'd1;
     Ctl = 1;
     #10
+    enable = 0;
     A = 24'd1;
     B = 24'd0;
     Ctl = 1;

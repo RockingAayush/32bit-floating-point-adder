@@ -26,8 +26,11 @@ reg Clear;
 reg Clk;
 reg [1:0]S;
 wire [23:0]A;
+wire guard;
+wire round;
+wire sticky;
 
-PIPO_bidirectional_shift_register uut(.I(I),.Clear(Clear),.Clk(Clk),.S(S),.A(A));
+PIPO_bidirectional_shift_register uut(.I(I),.Clear(Clear),.Clk(Clk),.S(S),.A(A),.guard(guard),.round(round),.sticky(sticky));
 
 always #5 Clk = ~Clk;
 
@@ -52,5 +55,19 @@ initial begin
     S = 2'b00;
     #10
     Clear = 1;
+    #10
+    Clear = 0;
+    I = 24'b0000_0110_0000_0000_1000_0000;
+    S = 2'b11;
+    #10// Right shift
+    S = 2'b01;
+    #10// Right shift
+    S = 2'b01;
+    #10// Right shift
+    S = 2'b01;
+    #10// Right shift
+    S = 2'b01;
+    #10// Right shift
+    S = 2'b01;
 end
 endmodule

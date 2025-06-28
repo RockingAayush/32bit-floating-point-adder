@@ -25,13 +25,15 @@ module tb_adder_subtractor_8bit();
 reg [7:0]A;
 reg [7:0]B;
 reg Ctl;
+reg enable;
 wire Cout;
 wire [7:0]Sum;
 wire [7:0]Difference;
 
-adder_subtractor_8bit uut(.A(A),.B(B),.Ctl(Ctl),.Cout(Cout),.Sum(Sum),.Difference(Difference));
+adder_subtractor_8bit uut(.A(A),.B(B),.Ctl(Ctl),.Cout(Cout),.Sum(Sum),.Difference(Difference),.enable(enable));
 initial begin
     #10
+    enable = 0;
     A = 8'd28;
     B = 8'd34;
     Ctl = 0;
@@ -44,6 +46,7 @@ initial begin
     B = 8'd34;
     Ctl = 1;
     #10
+    enable = 1;
     A = 8'b1111_1111;
     B = 8'd34;
     Ctl = 1;

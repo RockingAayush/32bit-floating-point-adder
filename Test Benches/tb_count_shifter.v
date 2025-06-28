@@ -29,6 +29,7 @@ reg Clear;
 reg Direction;
 wire [23:0]Result;
 wire shift_enable;
+wire guard,round,sticky;
 
 count_shifter uut(
                 .Data(Data),
@@ -38,8 +39,10 @@ count_shifter uut(
                 .Clear(Clear),
                 .Direction(Direction),
                 .Result(Result),
-                .shift_enable(shift_enable)
-                );
+                .shift_enable(shift_enable),
+                .guard(guard),
+                .round(round),
+                .sticky(sticky));
 
 always #5 Clk = ~Clk;
 
@@ -50,13 +53,14 @@ initial begin
         Data = 24'd0;
         Load = 0;
         Count = 8'd0;
-        Clear = 0;
+        Clear = 1;
         Direction = 0;
 
         // ------------------------------------
         // Test 1: Right shift (Direction = 0)
         // ------------------------------------
         #10
+        Clear = 0;
         Data = 24'b0000_1111_0000_1111_1111_1110;
         Count = 8'd6;
         Direction = 0;
@@ -90,13 +94,16 @@ initial begin
         // ------------------------------------
         // Test 4: Count > 23 (invalid case)
         // ------------------------------------
+        Clear = 1;
+        #10
+        Clear = 0;
         Data = 24'h5ABCDE;
         Count = 8'd30;
         Direction = 0;
         Load = 1;
         #10 Load = 0;
 
-        #30;
+        #350;
 
         // ------------------------------------
         // Test 5: Clear test
