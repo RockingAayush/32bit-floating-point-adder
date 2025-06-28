@@ -20,11 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module adder_subtractor_8bit(A,B,Ctl,Cout,Sum,Difference);
+module adder_subtractor_8bit(A,B,Ctl,Cout,Sum,Difference,enable);
 // Ctl = 1 A - B
 input [7:0]A;
 input [7:0]B;
 input Ctl;
+input enable;
 output [7:0]Sum;
 output Cout;
 output [7:0]Difference;
@@ -41,14 +42,16 @@ generate for(i=0;i<8;i=i+1) begin: adder_chain
             .B(B_xor_ctl[i]),
             .Cin(Ctl),
             .Cout(carry[i]),
-            .Sum(Sum[i]));
+            .Sum(Sum[i]),
+            .enable(enable));
     end else begin
         full_adder FA(
             .A(A[i]),
             .B(B_xor_ctl[i]),
             .Cin(carry[i-1]),
             .Cout(carry[i]),
-            .Sum(Sum[i]));
+            .Sum(Sum[i]),
+            .enable(enable));
     end
 end
 endgenerate

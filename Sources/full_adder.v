@@ -20,15 +20,21 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module full_adder(A,B,Cin,Cout,Sum);
+module full_adder(A,B,Cin,Cout,Sum,enable);
 input A;
 input B;
 input Cin;
+input enable;
 output reg Sum;
 output reg Cout;
 
 always@(*) begin
-    Sum = A^B^Cin;
-    Cout = (A&B) | (A^B)&Cin;
+    if (enable) begin
+        Sum = A^B^Cin;
+        Cout = (A&B) | (A^B)&Cin;
+    end else begin
+        Sum = 1'b0;
+        Cout = 1'b0;
+    end
 end
 endmodule

@@ -20,29 +20,51 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module PIPO_bidirectional_shift_register(I,Clear,Clk,S,A);
+module PIPO_bidirectional_shift_register(I,Clear,Clk,S,A,guard,round,sticky);
 input [23:0]I;
 input Clear;
 input Clk;
 input [1:0]S;
 output [23:0]A;
+output guard;
+output round;
+output reg sticky;
 
-wire [23:0]mux_out;
+wire [25:0]I_appended_00;
+wire [25:0]A_extended;
+wire [25:0]mux_out;
+
+
+always@(posedge Clk or posedge Clear) begin
+    if(Clear) begin
+        sticky <= 1'b0;
+    end else if(S == 2'b01) begin
+        sticky <= sticky | A_extended[0];
+    end
+end
+
+assign I_appended_00 = {I, 2'b00};
+assign A = A_extended[25:2];  
+assign guard = A_extended[1];
+assign round = A_extended[0];
+
 genvar i;
-generate for(i = 0;i<24;i=i+1) begin: DFF_chain
+generate for(i = 0;i<26;i=i+1) begin: DFF_chain
     
     MUX_4to1 mux(.S(S),
                  .In(
-                    (i==0)?{I[i],1'b0,A[i+1],A[i]}:
-                    (i==23)?{I[i],A[i-1],1'b0,A[i]}:
-                    {I[i],A[i-1],A[i+1],A[i]}
+                    (i==0)?{I_appended_00[i],1'b0,A_extended[i+1],A_extended[i]}:
+                    (i==25)?{I_appended_00[i],A_extended[i-1],1'b0,A_extended[i]}:
+                    {I_appended_00[i],A_extended[i-1],A_extended[i+1],A_extended[i]}
                     ),
                  .Out(mux_out[i]));
     
     dFF DFF(.D(mux_out[i]),
             .Clear(Clear),
             .Clk(Clk),
-            .Q(A[i]));                      
+            .Q(A_extended[i]));                      
     end
-endgenerate    
+endgenerate
+
+    
 endmodule

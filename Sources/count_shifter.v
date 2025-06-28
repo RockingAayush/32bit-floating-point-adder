@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module count_shifter(Count,Load,Data,Clear,Clk,Direction,Result,shift_enable);
+module count_shifter(Count,Load,Data,Clear,Clk,Direction,Result,shift_enable,guard,round,sticky);
 input [23:0]Data;
 input [7:0]Count;
 input Load;  //Load = 1 Load data Load = 0 Shift
@@ -28,6 +28,8 @@ input Clk;
 input Clear;
 input Direction; //Direction = 0 right shift Direction = 1 left shift
 output [23:0]Result;
+output guard,round;
+output sticky;
 
 wire [4:0]Q_count;
 
@@ -54,14 +56,18 @@ always@(*) begin
     else 
         S = 2'b00;   //Hold data        
 end
-        
+ 
+     
 PIPO_bidirectional_shift_register register(
             .I(Data),
             .Clear(Clear),
             .Clk(Clk),
             .S(S),
-            .A(internal_result));
+            .A(internal_result),
+            .guard(guard),
+            .round(round),
+            .sticky(sticky));
             
-assign Result = (Count > 7'd24) ? 24'd0 : internal_result;                        
+assign Result = internal_result;                        
             
 endmodule

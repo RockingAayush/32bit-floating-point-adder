@@ -23,6 +23,7 @@ module adder_subtractor_24bit(
     input [23:0] A,
     input [23:0] B,
     input Ctl,
+    input enable,
     output [23:0] Sum,
     output Cout,
     output [23:0] Difference
@@ -41,7 +42,8 @@ generate for(i = 0; i < 24; i = i + 1) begin: adder_chain
             .B(B_xor_ctl[i]),
             .Cin(Ctl),
             .Cout(carry[i]),
-            .Sum(Sum[i])
+            .Sum(Sum[i]),
+            .enable(enable)
         );
     end else begin
         full_adder FA(
@@ -49,7 +51,8 @@ generate for(i = 0; i < 24; i = i + 1) begin: adder_chain
             .B(B_xor_ctl[i]),
             .Cin(carry[i-1]),
             .Cout(carry[i]),
-            .Sum(Sum[i])
+            .Sum(Sum[i]),
+            .enable(enable)
         );
     end
 end
