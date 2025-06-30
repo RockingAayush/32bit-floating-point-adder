@@ -24,7 +24,7 @@ module tb_Leading_Zero_Detector();
 
 reg [23:0]num;
 reg enable;
-wire [4:0]count;
+wire [7:0]count;
 
 Leading_Zero_Detector uut(
     .num(num),
