@@ -30,10 +30,9 @@ input Direction; //Direction = 0 right shift Direction = 1 left shift
 output [23:0]Result;
 output guard,round;
 output sticky;
+output shift_enable;
 
 wire [4:0]Q_count;
-
-output shift_enable;
 wire shift_enable_internal;
 assign shift_enable = shift_enable_internal;
 
