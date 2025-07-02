@@ -9,11 +9,10 @@ module tb_normalizing_unit();
     reg [23:0] mantissa;
     reg [7:0] exponent;
     reg enable;
-
     // Outputs
     wire [23:0] mantissa_normalized;
     wire [7:0] exponent_normalized;
-
+    wire done;
     // Instantiate the Unit Under Test (UUT)
     normalizing_unit uut (
         .Clk(Clk),
@@ -23,7 +22,8 @@ module tb_normalizing_unit();
         .exponent(exponent),
         .mantissa_normalized(mantissa_normalized),
         .exponent_normalized(exponent_normalized),
-        .enable(enable)
+        .enable(enable),
+        .done(done)
     );
 
     // Clock generation
